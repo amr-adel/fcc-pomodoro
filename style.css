@@ -1,0 +1,388 @@
+:root {
+    --white: #eff3f6;
+
+    --grey1: #dbe1e6;
+    --grey2: #C8D1D8;;
+    --grey3: #767b86;
+
+    --prim: #0094ff;
+    --scnd: #354052;
+    --red: #ef5350;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    min-height: 100vh;
+    background: radial-gradient(var(--white), var(--grey1));
+    border-top: 10px solid var(--prim);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--scnd);
+    text-transform: uppercase;
+    text-align: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: calc(100vh - 10px);
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    font-family: inherit;
+}
+
+button:focus {
+    outline: none;
+}
+
+.header {
+    width: 90vw;
+    height: 80px;
+    border-bottom: 1px solid var(--prim);
+    margin: 0 auto;
+}
+
+.brand {
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 80px;
+    letter-spacing: 4px;
+}
+
+.timers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.current-timer {
+    font-size: .3em;
+    color: var(--grey1);
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+}
+
+#min, #sec {
+    color: var(--scnd);
+}
+
+.control {
+    position: absolute;
+    font-size: .5em;
+    width: 1em;
+    height: 1em;
+    bottom: 7%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+    border-radius: 50%;
+    cursor: pointer;
+    /* background-color: red; */
+}
+
+.control .icon {
+    fill: var(--grey1);
+    max-height: 100%;
+    max-width: 100%;
+    transition: fill .2s ease-out;
+}
+
+.control .icon:hover {
+    fill: var(--grey2);
+}
+
+.reset {
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    font-weight: 300;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--red);
+    border-bottom: 1px solid transparent;
+    transition: border-bottom .2s ease-out;
+}
+
+.reset:hover {
+    border-bottom: 1px solid var(--red);
+}
+
+.set-timer {
+    /* padding-top: 100px; */
+}
+
+#break {
+    order: -1;
+}
+
+.set-timer .box {
+    height: 175px;
+    width: 175px;
+    border-radius: 500px;
+    border: 6px solid var(--grey2);
+    position: relative;
+}
+
+.set-timer .box::after {
+    content: 'min';
+    position: absolute;
+    font-size: 36px;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--grey2);
+}
+
+.set-timer .minutes {
+    font-size: 64px;
+    color: var(--prim);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.set-timer .plus,
+.set-timer .minus {
+    position: absolute;
+    top: 50%;
+    font-size: 42px;
+    line-height: 28px;
+    height: 28px;
+    width: 28px;
+    transform: translateY(-50%);
+    color: var(--grey3);
+    cursor: pointer;
+    transition: color .2s ease-out
+}
+
+.set-timer .plus {
+    right: 10px;
+}
+
+.set-timer .plus:hover {
+    color: var(--prim);
+}
+
+.set-timer .minus {
+    left: 10px;
+}
+
+.set-timer .minus:hover {
+    color: var(--red);
+}
+
+.set-timer .title {
+    color: var(--prim);
+    font-size: 28px;
+    font-weight: 300;
+    margin-top: 10px;
+}
+
+/*============================================================================================================*/
+/* Override https://github.com/jumpifzero/purecss-circular-progress-bar */
+/*============================================================================================================*/
+
+.progress-circle {
+   font-size: 13vh;
+   margin: 50px 15vw 80px;
+   width: 4em;
+   height: 4em;
+   background-color: var(--white); 
+   line-height: 4em;
+   border: .15em solid var(--grey1);
+   /* box-shadow: 0 .15em .3em rgba(118, 123, 134, .6); */
+}
+
+.progress-circle::after{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    width: 3.45em;
+    height: 3.45em;
+    background-color: var(--white);
+    border: .1875em solid var(--grey1);
+}
+
+/* Text inside the control */
+.progress-circle .timer {
+    height: 3.7em;
+    line-height: 3.7em;
+    width: 3.7em;
+    color: var(--grey2);
+}
+
+.left-half-clipper { 
+   width: 4em;
+   height: 4em;
+   clip: rect(0, 3.7em, 3.7em, 1.85em); /* clips the whole left half  */
+}
+
+.value-bar {
+   clip: rect(0, 1.85em, 3.7em, 0);
+   width: 3.7em;
+   height: 3.7em;
+   border: 0.15em solid var(--scnd);
+}
+
+.progress-circle.over50 .first50-bar {
+   clip: rect(0, 3.7em, 3.7em, 1.85em);
+   background-color: var(--scnd);
+   width: 3.7em;
+   height: 3.7em;
+}
+
+/* ================================================================================== */
+
+.footer__follow {
+    margin-top: 20px;
+    width: 90vw;
+    border-bottom: 10px solid var(--prim);
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.footer__follow a {
+    margin: 10px;
+}
+
+.footer__follow svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--scnd);
+    transition: fill .2s ease-out;
+}
+
+.footer__follow svg:last-child {
+    width: 21px;
+}
+
+.footer__follow a:hover svg{
+    fill: var(--prim);
+}
+
+/* ================================================================================== */
+
+@media screen and (max-width: 1024px) {
+    .timers {
+        align-items: flex-end;
+    }
+
+    .progress-circle {
+        margin: 50px 5vw 80px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    .progress-circle {
+        font-size: 15vw;
+        margin: 50px auto;
+    }
+
+    .main-timer {
+        flex: 0 0 100%;
+    }
+
+    .timers {
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    #break {
+        order: 2;
+    }
+
+    #session {
+        order: 3;
+    }
+}
+
+@media screen and (max-width: 414px) {
+
+    .header {
+        height: 48px;
+    }
+
+    .brand {
+        font-size: 32px;
+        line-height: 48px;
+    }
+
+    .progress-circle {
+        font-size: 20vw;
+        margin: 20px auto 70px;
+    }
+
+    .reset {
+        bottom: -60px;
+        font-size: 20px;
+    }
+
+    .set-timer {
+        background-color: var(--grey1);
+    }
+
+    .set-timer .box {
+        height: 120px;
+        width: 40vw;
+        border-radius: 0;
+        border: none;
+        position: relative;
+    }
+    
+    .set-timer .box::after {
+        display: none;
+    }
+    
+    .set-timer .minutes {
+        font-size: 36px;
+        color: var(--grey3);
+    }
+    
+    .set-timer .plus,
+    .set-timer .minus {
+        left: 0;
+        transform: translateY(0);
+        width: 100%;
+        height: 36px;
+    }
+    
+    .set-timer .plus {
+        top: 0;
+        color: var(--prim);
+    }
+    
+    .set-timer .minus {
+        top: auto;
+        bottom: 0;
+        color: var(--red);
+        line-height: 1px;
+    }
+    
+    .set-timer .title {
+        color: var(--grey1);
+        background-color: var(--scnd);
+        font-size: 20px;
+        margin: 0;
+        padding: 10px 0;
+    }
+}
