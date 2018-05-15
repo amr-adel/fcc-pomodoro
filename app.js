@@ -19,10 +19,40 @@ const pomodoroView = (function() {
         sessionPluse: document.getElementById('session-plus'),
         sessionMinus: document.getElementById('session-minus'),
     }
-    
+
+    return {
+        dom: function() {
+            return elmIds;
+        }
+    };
+
 })();
 
 
 const pomodoroContorller = (function(model, view) {
+
+    view.dom().playPause.addEventListener('click', function() {
+        // Play/Pause action
+    });
+
+    view.dom().reset.addEventListener('click', function () {
+        // Reset timer
+    });
+
+    view.dom().breakPluse.addEventListener('click', function () {
+        // Increase break time
+    })
+
+    view.dom().breakMinus.addEventListener('click', function () {
+        // Decrease break time
+    });
+
+    view.dom().sessionPluse.addEventListener('click', function () {
+        // Increase session time
+    });
+
+    view.dom().sessionMinus.addEventListener('click', function () {
+        // Decrease session time
+    });
 
 })(pomodoroModel, pomodoroView);
