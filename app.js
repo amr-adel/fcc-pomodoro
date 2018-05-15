@@ -67,26 +67,35 @@ const pomodoroContorller = (function(model, view) {
 
     view.dom().breakPluse.addEventListener('click', function () {
         // Increase break time
-        model.setBreakTime('add');
-        view.renderBreakTime(model.getBreakTime());
+        if (model.getBreakTime() < 15) {
+            model.setBreakTime('add');
+            view.renderBreakTime(model.getBreakTime());
+        }
     })
 
     view.dom().breakMinus.addEventListener('click', function () {
         // Decrease break time
-        model.setBreakTime('subtract');
-        view.renderBreakTime(model.getBreakTime());
+        if (model.getBreakTime() > 5) {
+            model.setBreakTime('subtract');
+            view.renderBreakTime(model.getBreakTime());
+        }
     });
 
     view.dom().sessionPluse.addEventListener('click', function () {
         // Increase session time
-        model.setSessionTime('add');
-        view.renderSessionTime(model.getSessionTime());
+        if (model.getSessionTime() < 60) {
+            model.setSessionTime('add');
+            view.renderSessionTime(model.getSessionTime());
+        }
     });
 
     view.dom().sessionMinus.addEventListener('click', function () {
         // Decrease session time
-        model.setSessionTime('subtract');
-        view.renderSessionTime(model.getSessionTime());
+        if (model.getSessionTime() > 25) {
+            model.setSessionTime('subtract');
+            view.renderSessionTime(model.getSessionTime());
+        }
+        
     });
 
 })(pomodoroModel, pomodoroView);
