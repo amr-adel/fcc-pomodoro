@@ -1,7 +1,7 @@
 const pomodoroModel = (function () {
 
     let breakTime = 5;
-    let sessionTime = 25;
+    let sessionTime = 1;
 
     let minutes = 0;
     let secondes = 0;
@@ -74,12 +74,18 @@ const pomodoroContorller = (function(model, view) {
 
     view.dom().playPause.addEventListener('click', function() {
         // Play/Pause action
-        console.log('Play');
+        if (!countDown.counter) {
+            countDown.play();
+            countDown.counter = true;
+        } else {
+            countDown.pause();
+            countDown.counter = false;
+        }
     });
 
     view.dom().reset.addEventListener('click', function () {
         // Reset timer
-        console.log('Reset');
+        reset();
     });
 
     view.dom().breakPluse.addEventListener('click', function () {
@@ -102,6 +108,7 @@ const pomodoroContorller = (function(model, view) {
         // Increase session time
         if (model.getSessionTime() < 60) {
             model.setSessionTime('add');
+            updateCurrentTime();
             view.renderSessionTime(model.getSessionTime());
         }
     });
@@ -110,16 +117,44 @@ const pomodoroContorller = (function(model, view) {
         // Decrease session time
         if (model.getSessionTime() > 25) {
             model.setSessionTime('subtract');
+            updateCurrentTime();
             view.renderSessionTime(model.getSessionTime());
         }
         
     });
 
-    const reset = function () {
+    const updateCurrentTime = function () {
         model.setCurrentTime(model.getSessionTime(), 0);
         view.renderCurrentTime(model.getCurrentTime().min, model.getCurrentTime().sec);
+    };
+
+    const reset = function () {
+        updateCurrentTime();
         view.renderBreakTime(model.getBreakTime());
         view.renderSessionTime(model.getSessionTime());
+    }
+
+    const countDown = {
+        counter: false,
+        newCounter: null,
+        watch: function () {
+            if (model.getCurrentTime().min === 0 && model.getCurrentTime().sec === 0) {
+                countDown.pause();
+                countDown.counter = false;
+            } else if (model.getCurrentTime().sec === 0) {
+                model.setCurrentTime(model.getCurrentTime().min - 1, 59);
+            } else {
+                model.setCurrentTime(model.getCurrentTime().min, model.getCurrentTime().sec - 1);
+            }
+
+            view.renderCurrentTime(model.getCurrentTime().min, model.getCurrentTime().sec);
+        },
+        play: function () {
+            this.newCounter = setInterval(this.watch, 250);
+        },
+        pause: function () {
+            clearInterval(this.newCounter);
+        }
     }
 
     return {
