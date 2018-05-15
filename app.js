@@ -1,5 +1,23 @@
 const pomodoroModel = (function () {
 
+    let breakTime = 5;
+    let sessionTime = 25;
+
+    return {
+        getBreakTime: function() {
+            return breakTime;
+        },
+        setBreakTime: function(type) {
+            type === 'add' ? breakTime++ : breakTime--;
+        },
+        getSessionTime: function() {
+            return sessionTime;
+        },
+        setSessionTime: function(type) {
+            type === 'add' ? sessionTime++ : sessionTime--;
+        },
+    };
+
 })();
 
 
@@ -23,7 +41,13 @@ const pomodoroView = (function() {
     return {
         dom: function() {
             return elmIds;
-        }
+        },
+        renderBreakTime: function(value) {
+            elmIds.break.innerText = value;
+        },
+        renderSessionTime: function(value) {
+            elmIds.session.innerText = value;
+        },
     };
 
 })();
@@ -33,26 +57,36 @@ const pomodoroContorller = (function(model, view) {
 
     view.dom().playPause.addEventListener('click', function() {
         // Play/Pause action
+        console.log('Play');
     });
 
     view.dom().reset.addEventListener('click', function () {
         // Reset timer
+        console.log('Reset');
     });
 
     view.dom().breakPluse.addEventListener('click', function () {
         // Increase break time
+        model.setBreakTime('add');
+        view.renderBreakTime(model.getBreakTime());
     })
 
     view.dom().breakMinus.addEventListener('click', function () {
         // Decrease break time
+        model.setBreakTime('subtract');
+        view.renderBreakTime(model.getBreakTime());
     });
 
     view.dom().sessionPluse.addEventListener('click', function () {
         // Increase session time
+        model.setSessionTime('add');
+        view.renderSessionTime(model.getSessionTime());
     });
 
     view.dom().sessionMinus.addEventListener('click', function () {
         // Decrease session time
+        model.setSessionTime('subtract');
+        view.renderSessionTime(model.getSessionTime());
     });
 
 })(pomodoroModel, pomodoroView);
