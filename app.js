@@ -3,6 +3,9 @@ const pomodoroModel = (function () {
     let breakTime = 5;
     let sessionTime = 25;
 
+    let minutes = 0;
+    let secondes = 0;
+
     return {
         getBreakTime: function() {
             return breakTime;
@@ -16,6 +19,16 @@ const pomodoroModel = (function () {
         setSessionTime: function(type) {
             type === 'add' ? sessionTime++ : sessionTime--;
         },
+        getCurrentTime: function() {
+            return {
+                min: minutes,
+                sec: secondes
+            };
+        },
+        setCurrentTime: function(min, sec) {
+            minutes = min;
+            secondes = sec;
+        }
     };
 
 })();
@@ -48,6 +61,10 @@ const pomodoroView = (function() {
         renderSessionTime: function(value) {
             elmIds.session.innerText = value;
         },
+        renderCurrentTime: function (min, sec) {
+            elmIds.minutes.innerText = min < 10 ? "0" + min : min;
+            elmIds.secondes.innerText = sec < 10 ? "0" + sec : sec;
+        }
     };
 
 })();
@@ -98,4 +115,19 @@ const pomodoroContorller = (function(model, view) {
         
     });
 
+    const reset = function () {
+        model.setCurrentTime(model.getSessionTime(), 0);
+        view.renderCurrentTime(model.getCurrentTime().min, model.getCurrentTime().sec);
+        view.renderBreakTime(model.getBreakTime());
+        view.renderSessionTime(model.getSessionTime());
+    }
+
+    return {
+        init: function () {
+            reset();
+        }
+    }
+
 })(pomodoroModel, pomodoroView);
+
+pomodoroContorller.init();
