@@ -39,6 +39,7 @@ const pomodoroView = (function() {
         reset: document.getElementById('reset'),
         timerType: document.getElementById('timer-type'),
         timerIcon: document.getElementById('icon'),
+        progressCircle: document.getElementById('progress-circle'),
 
         break: document.getElementById('break-minutes'),
         breakPluse: document.getElementById('break-plus'),
@@ -47,6 +48,25 @@ const pomodoroView = (function() {
         session: document.getElementById('session-minutes'),
         sessionPluse: document.getElementById('session-plus'),
         sessionMinus: document.getElementById('session-minus')
+    };
+
+    let circleMax = 0;
+
+    const updateCircle = function(current) {
+        if ((current * 100) % circleMax === 0) {
+            if (current * 100 / circleMax <= 50) {
+                elmIds.progressCircle.setAttribute(
+                    'class',
+                    `progress-circle p${current * 100 / circleMax}`
+                );
+            } else {
+                elmIds.progressCircle.setAttribute(
+                    'class',
+                    `progress-circle over50 p${current * 100 / circleMax}`
+                );
+            }
+            console.log(current * 100 / circleMax);
+        }
     };
 
     return {
@@ -59,9 +79,14 @@ const pomodoroView = (function() {
         renderSessionTime: function(value) {
             elmIds.session.innerText = value;
         },
+        setCircleMax: function(max) {
+            circleMax = max * 60;
+            console.log(circleMax);
+        },
         renderCurrentTime: function(min, sec) {
             elmIds.minutes.innerText = min < 10 ? '0' + min : min;
             elmIds.secondes.innerText = sec < 10 ? '0' + sec : sec;
+            updateCircle(min * 60 + sec);
         }
     };
 })();
@@ -143,6 +168,7 @@ const pomodoroContorller = (function(model, view) {
         countDown.pause();
         countDown.running = false;
         countDown.type = 'inactive';
+        view.setCircleMax(model.getSessionTime());
         updateCurrentTime();
         view.dom().timerType.innerText = '';
         view.dom().timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
@@ -161,6 +187,7 @@ const pomodoroContorller = (function(model, view) {
                     model.setCurrentTime(model.getBreakTime() - 1, 59);
                     countDown.type = 'break';
                     view.dom().timerType.innerText = countDown.type;
+                    view.setCircleMax(model.getBreakTime());
                 } else if (countDown.type === 'break') {
                     reset();
                 }
@@ -179,7 +206,7 @@ const pomodoroContorller = (function(model, view) {
             );
         },
         play: function() {
-            this.newCounter = setInterval(this.watch, 1000);
+            this.newCounter = setInterval(this.watch, 100);
         },
         pause: function() {
             clearInterval(this.newCounter);
