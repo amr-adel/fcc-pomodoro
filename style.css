@@ -69,7 +69,7 @@ button:focus {
     justify-content: center;
 }
 
-.current-timer {
+.timer-type {
     font-size: .3em;
     color: var(--grey1);
     position: absolute;

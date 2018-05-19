@@ -37,6 +37,8 @@ const pomodoroView = (function() {
         secondes: document.getElementById('sec'),
         playPause: document.getElementById('control'),
         reset: document.getElementById('reset'),
+        timerType: document.getElementById('timer-type'),
+        timerIcon: document.getElementById('icon'),
 
         break: document.getElementById('break-minutes'),
         breakPluse: document.getElementById('break-plus'),
@@ -126,12 +128,15 @@ const pomodoroContorller = (function(model, view) {
         countDown.running = true;
         if (countDown.type === 'inactive') {
             countDown.type = 'session';
+            view.dom().timerType.innerText = countDown.type;
         }
+        view.dom().timerIcon.setAttribute('xlink:href', 'icons.svg#icon-pause');
     };
 
     const pause = function() {
         countDown.pause();
         countDown.running = false;
+        view.dom().timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
     };
 
     const reset = function() {
@@ -139,6 +144,8 @@ const pomodoroContorller = (function(model, view) {
         countDown.running = false;
         countDown.type = 'inactive';
         updateCurrentTime();
+        view.dom().timerType.innerText = '';
+        view.dom().timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
     };
 
     const countDown = {
@@ -153,6 +160,7 @@ const pomodoroContorller = (function(model, view) {
                 if (countDown.type === 'session') {
                     model.setCurrentTime(model.getBreakTime() - 1, 59);
                     countDown.type = 'break';
+                    view.dom().timerType.innerText = countDown.type;
                 } else if (countDown.type === 'break') {
                     reset();
                 }
