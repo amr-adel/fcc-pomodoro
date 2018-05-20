@@ -1,6 +1,6 @@
 const pomodoroModel = (function() {
-    let breakTime = 3;
-    let sessionTime = 5;
+    let breakTime = 1;
+    let sessionTime = 1;
 
     return {
         getBreakTime: function() {
@@ -20,13 +20,15 @@ const pomodoroModel = (function() {
 
 const pomodoroView = (function() {
     const elmIds = {
+        progressCircle: document.getElementById('progress-circle'),
+        timerType: document.getElementById('timer-type'),
         minutes: document.getElementById('min'),
         secondes: document.getElementById('sec'),
         playPause: document.getElementById('control'),
-        reset: document.getElementById('reset'),
-        timerType: document.getElementById('timer-type'),
         timerIcon: document.getElementById('icon'),
-        progressCircle: document.getElementById('progress-circle'),
+
+        reset: document.getElementById('reset'),
+        alarm: document.getElementById('alarm'),
 
         break: document.getElementById('break-minutes'),
         breakPluse: document.getElementById('break-plus'),
@@ -76,10 +78,11 @@ const pomodoroView = (function() {
             elmIds.secondes.innerText = sec < 10 ? '0' + sec : sec;
             updateCircle(min * 60 + sec);
         },
-        init: function(current, breakTime, sessionTime) {
+        init: function(breakTime, sessionTime) {
             elmIds.timerType.innerText = '';
             elmIds.timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
-            this.renderCurrentTime(current.min, current.sec);
+            this.setCircleMax(sessionTime);
+            this.renderCurrentTime(sessionTime, 0);
             this.renderBreakTime(breakTime);
             this.renderSessionTime(sessionTime);
         }
@@ -131,8 +134,8 @@ const pomodoroContorller = (function(model, view) {
         }
     });
 
-    const resetCurrentTime = function() {
-        countDown.currentTime.min = model.getSessionTime();
+    const resetCurrentTime = function(start) {
+        countDown.currentTime.min = start;
         countDown.currentTime.sec = 0;
         view.renderCurrentTime(
             countDown.currentTime.min,
@@ -158,13 +161,20 @@ const pomodoroContorller = (function(model, view) {
 
     const reset = function() {
         pause();
-        resetCurrentTime();
+        resetCurrentTime(model.getSessionTime());
         countDown.type = 'inactive';
         view.init(
-            countDown.currentTime,
             model.getBreakTime(),
             model.getSessionTime()
         );
+    };
+
+    const startBreak = function() {
+        resetCurrentTime(model.getBreakTime());
+
+        countDown.type = 'break';
+        view.dom().timerType.innerText = countDown.type;
+        view.setCircleMax(model.getBreakTime());
     };
 
     const countDown = {
@@ -180,16 +190,8 @@ const pomodoroContorller = (function(model, view) {
                 countDown.currentTime.min === 0 &&
                 countDown.currentTime.sec === 0
             ) {
-                if (countDown.type === 'session') {
-                    countDown.currentTime.min = model.getBreakTime() - 1;
-                    countDown.currentTime.sec = 59;
-
-                    countDown.type = 'break';
-                    view.dom().timerType.innerText = countDown.type;
-                    view.setCircleMax(model.getBreakTime());
-                } else if (countDown.type === 'break') {
-                    reset();
-                }
+                countDown.type === 'session' ? startBreak() : reset();
+                view.dom().alarm.play();
             } else if (countDown.currentTime.sec === 0) {
                 countDown.currentTime.min--;
                 countDown.currentTime.sec = 59;
@@ -203,7 +205,7 @@ const pomodoroContorller = (function(model, view) {
             );
         },
         play: function() {
-            this.newCounter = setInterval(this.watch, 100);
+            this.newCounter = setInterval(this.watch, 500);
         },
         pause: function() {
             clearInterval(this.newCounter);
