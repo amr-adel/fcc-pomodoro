@@ -80,7 +80,6 @@ const pomodoroView = (function() {
         },
         init: function(breakTime, sessionTime) {
             elmIds.timerType.innerText = '';
-            elmIds.timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
             this.setCircleMax(sessionTime);
             this.renderCurrentTime(sessionTime, 0);
             this.renderBreakTime(breakTime);
@@ -120,8 +119,7 @@ const pomodoroContorller = (function(model, view) {
         // Increase session time
         if (model.getSessionTime() < 60 && countDown.type === 'inactive') {
             model.setSessionTime('add');
-            view.renderSessionTime(model.getSessionTime());
-            resetCurrentTime();
+            reset();
         }
     });
 
@@ -129,8 +127,7 @@ const pomodoroContorller = (function(model, view) {
         // Decrease session time
         if (model.getSessionTime() > 25 && countDown.type === 'inactive') {
             model.setSessionTime('subtract');
-            view.renderSessionTime(model.getSessionTime());
-            resetCurrentTime();
+            reset();
         }
     });
 
@@ -163,10 +160,7 @@ const pomodoroContorller = (function(model, view) {
         pause();
         resetCurrentTime(model.getSessionTime());
         countDown.type = 'inactive';
-        view.init(
-            model.getBreakTime(),
-            model.getSessionTime()
-        );
+        view.init(model.getBreakTime(), model.getSessionTime());
     };
 
     const startBreak = function() {
