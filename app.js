@@ -1,6 +1,6 @@
 const pomodoroModel = (function() {
-    let breakTime = 1;
-    let sessionTime = 1;
+    let breakTime = 5;
+    let sessionTime = 25;
 
     return {
         getBreakTime: function() {
@@ -199,7 +199,7 @@ const pomodoroContorller = (function(model, view) {
             );
         },
         play: function() {
-            this.newCounter = setInterval(this.watch, 500);
+            this.newCounter = setInterval(this.watch, 1000);
         },
         pause: function() {
             clearInterval(this.newCounter);

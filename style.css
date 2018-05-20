@@ -81,6 +81,9 @@ button:focus {
 
 #min, #sec {
     color: var(--scnd);
+    display: inline-block;
+    width: 35%;
+    line-height: 1;
 }
 
 .control {
@@ -172,7 +175,7 @@ button:focus {
     transform: translateY(-50%);
     color: var(--grey3);
     cursor: pointer;
-    transition: color .2s ease-out
+    transition: color .2s ease-out;
 }
 
 .set-timer .plus {
@@ -181,6 +184,7 @@ button:focus {
 
 .set-timer .plus:hover {
     color: var(--prim);
+    transform: translateY(-65%);
 }
 
 .set-timer .minus {
@@ -189,6 +193,7 @@ button:focus {
 
 .set-timer .minus:hover {
     color: var(--red);
+    transform: translateY(-65%);
 }
 
 .set-timer .title {
@@ -380,6 +385,16 @@ button:focus {
         bottom: 0;
         color: var(--red);
         line-height: 1px;
+    }
+
+    .set-timer .minus:hover,
+    .set-timer .plus:hover {
+        transform: translateY(0);
+    }
+
+    .set-timer .minus:active,
+    .set-timer .plus:active {
+        background-color: var(--grey2);
     }
     
     .set-timer .title {
