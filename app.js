@@ -52,7 +52,7 @@ const pomodoroView = (function() {
                     `progress-circle over50 p${current * 100 / circleMax}`
                 );
             }
-            console.log(current * 100 / circleMax);
+            // console.log(current * 100 / circleMax);
         }
     };
 
@@ -65,20 +65,20 @@ const pomodoroView = (function() {
         },
         renderSessionTime: function(value) {
             elmIds.session.innerText = value;
+            this.setCircleMax(value);
         },
         setCircleMax: function(max) {
             circleMax = max * 60;
-            console.log(circleMax);
+            // console.log(circleMax);
         },
         renderCurrentTime: function(min, sec) {
             elmIds.minutes.innerText = min < 10 ? '0' + min : min;
             elmIds.secondes.innerText = sec < 10 ? '0' + sec : sec;
             updateCircle(min * 60 + sec);
         },
-        init: function (current, breakTime, sessionTime) {
+        init: function(current, breakTime, sessionTime) {
             elmIds.timerType.innerText = '';
             elmIds.timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
-            this.setCircleMax(sessionTime);
             this.renderCurrentTime(current.min, current.sec);
             this.renderBreakTime(breakTime);
             this.renderSessionTime(sessionTime);
@@ -115,27 +115,23 @@ const pomodoroContorller = (function(model, view) {
 
     view.dom().sessionPluse.addEventListener('click', function() {
         // Increase session time
-        if (model.getSessionTime() < 60 && countDown.type !== 'session') {
+        if (model.getSessionTime() < 60 && countDown.type === 'inactive') {
             model.setSessionTime('add');
             view.renderSessionTime(model.getSessionTime());
-            if (countDown.type === 'inactive' && !countDown.running) {
-                updateCurrentTime();
-            }
+            resetCurrentTime();
         }
     });
 
     view.dom().sessionMinus.addEventListener('click', function() {
         // Decrease session time
-        if (model.getSessionTime() > 25 && countDown.type !== 'session') {
+        if (model.getSessionTime() > 25 && countDown.type === 'inactive') {
             model.setSessionTime('subtract');
             view.renderSessionTime(model.getSessionTime());
-            if (countDown.type === 'inactive' && !countDown.running) {
-                updateCurrentTime();
-            }
+            resetCurrentTime();
         }
     });
 
-    const updateCurrentTime = function() {
+    const resetCurrentTime = function() {
         countDown.currentTime.min = model.getSessionTime();
         countDown.currentTime.sec = 0;
         view.renderCurrentTime(
@@ -162,8 +158,13 @@ const pomodoroContorller = (function(model, view) {
 
     const reset = function() {
         pause();
-        updateCurrentTime();
-        view.init(countDown.currentTime, model.getBreakTime(), model.getSessionTime());
+        resetCurrentTime();
+        countDown.type = 'inactive';
+        view.init(
+            countDown.currentTime,
+            model.getBreakTime(),
+            model.getSessionTime()
+        );
     };
 
     const countDown = {
