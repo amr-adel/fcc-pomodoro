@@ -5,8 +5,9 @@ self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function (cache) {
       return cache.addAll([
-        '/',
+        './',
         'index.html',
+        'favicon.ico',
         'circular-prog-bar.css',
         'style.css',
         'app.js',
@@ -14,7 +15,7 @@ self.addEventListener('install', function (event) {
         'alarm.mp3',
         'icons/pomodoro-icon-192.png',
         'icons/pomodoro-icon-512.png',
-        './manifest.json',
+        'manifest.json',
         'https://fonts.googleapis.com/css?family=Montserrat:300',
         'https://fonts.gstatic.com/s/montserrat/v12/JTURjIg1_i6t8kCHKm45_cJD3gnD_g.woff2'
       ]);
@@ -27,7 +28,7 @@ self.addEventListener('activate', function (event) {
     caches.keys().then(function (cacheNames) {
       return Promise.all(
         cacheNames.filter(function (cacheName) {
-          return cacheName.startsWith('wittr-') &&
+          return cacheName.startsWith('pomodoro-static-') &&
             cacheName != staticCacheName;
         }).map(function (cacheName) {
           return caches.delete(cacheName);
@@ -42,8 +43,8 @@ self.addEventListener('fetch', function (event) {
   var requestUrl = new URL(event.request.url);
 
   if (requestUrl.origin === location.origin) {
-    if (requestUrl.pathname === '/') {
-      event.respondWith(caches.match('/'));
+    if (requestUrl.pathname === './') {
+      event.respondWith(caches.match('./'));
       return;
     }
   }
