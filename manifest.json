@@ -1,0 +1,31 @@
+{
+    "short_name": "Pomodoro",
+    "name": "Pomodoro Clock",
+    "version": "1.0",
+    "developer": {
+        "name": "Amr A. Abdelmoez",
+        "url": "https://github.com/amr-adel"
+    },
+    "applications": {
+        "gecko": {
+            "id": "c4b5f779-19da-4ab5-96db-f09a5c2d545d",
+            "strict_min_version": "42.0"
+        }
+    },
+    "icons": [
+        {
+            "src": "icons/pomodoro-icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "icons/pomodoro-icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "index.html",
+    "background_color": "#eff3f6",
+    "display": "standalone",
+    "theme_color": "#0094ff"
+}
