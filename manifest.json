@@ -14,12 +14,12 @@
     },
     "icons": [
         {
-            "src": "icons/pomodoro-icon-192.png",
+            "src": "src/pwa/pomodoro-icon-192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "icons/pomodoro-icon-512.png",
+            "src": "src/pwa/pomodoro-icon-512.png",
             "type": "image/png",
             "sizes": "512x512"
         }

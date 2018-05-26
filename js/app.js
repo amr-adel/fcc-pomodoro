@@ -54,7 +54,6 @@ const pomodoroView = (function() {
                     `progress-circle over50 p${current * 100 / circleMax}`
                 );
             }
-            // console.log(current * 100 / circleMax);
         }
     };
 
@@ -71,7 +70,6 @@ const pomodoroView = (function() {
         },
         setCircleMax: function(max) {
             circleMax = max * 60;
-            // console.log(circleMax);
         },
         renderCurrentTime: function(min, sec) {
             elmIds.minutes.innerText = min < 10 ? '0' + min : min;
@@ -147,13 +145,17 @@ const pomodoroContorller = (function(model, view) {
             countDown.type = 'session';
             view.dom().timerType.innerText = countDown.type;
         }
-        view.dom().timerIcon.setAttribute('xlink:href', 'icons.svg#icon-pause');
+        view
+            .dom()
+            .timerIcon.setAttribute('xlink:href', 'src/icons.svg#icon-pause');
     };
 
     const pause = function() {
         countDown.pause();
         countDown.running = false;
-        view.dom().timerIcon.setAttribute('xlink:href', 'icons.svg#icon-play');
+        view
+            .dom()
+            .timerIcon.setAttribute('xlink:href', 'src/icons.svg#icon-play');
     };
 
     const reset = function() {
@@ -215,13 +217,15 @@ const pomodoroContorller = (function(model, view) {
 
 pomodoroContorller.init();
 
-
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').then(function(registration) {
-      console.log('Service worker registration succeeded:', registration);
-    }).catch(function(error) {
-      console.log('Service worker registration failed:', error);
-    });
-  } else {
+    navigator.serviceWorker
+        .register('sw.js')
+        .then(function(registration) {
+            console.log('Service worker registration succeeded:', registration);
+        })
+        .catch(function(error) {
+            console.log('Service worker registration failed:', error);
+        });
+} else {
     console.log('Service workers are not supported.');
-  }
+}
